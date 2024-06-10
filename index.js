@@ -25,6 +25,10 @@ app.use("/todo", (req, res) => {
 // json to obj and obj to json
 app.use(express.json());
 
+// express to DB connection
+const { Sequelize, DataTypes } = require("sequelize");
+const sequelize = new Sequelize("sqlite:./db.sqlite3");
+
 // error control
 const errorHandler = (err, req, res, next) => {
   const errorStatusCode = res?.errorStatusCode || 500;
