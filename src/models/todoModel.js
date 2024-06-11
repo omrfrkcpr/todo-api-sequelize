@@ -29,7 +29,8 @@ const TODO = sequelize.define(`todos`, {
   //   type: DataTypes.TEXT,
   // },
   priority: {
-    type: DataTypes.TINYINT,
+    // type: DataTypes.TINYINT, // sqlite
+    type: DataTypes.INTEGER, // postgre
     allowNull: false,
     defaultValue: 0, // -1: low, 0: normal, 1: high
   },
@@ -37,13 +38,13 @@ const TODO = sequelize.define(`todos`, {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: false, // false: not done, true: done
-    validate: {
-      isBoolean(value) {
-        if (typeof value !== "boolean") {
-          throw new Error("isDone must be a boolean value");
-        }
-      },
-    },
+    // validate: {
+    //   isBoolean(value) {
+    //     if (typeof value !== "boolean") {
+    //       throw new Error("isDone must be a boolean value");
+    //     }
+    //   },
+    // },
   },
   //! createdAt & updatedAt auto generated
   // createdAt: {
@@ -57,7 +58,7 @@ const TODO = sequelize.define(`todos`, {
 });
 
 //* SYNC SEQUELIZE
-// sequelize.sync() //! run once
+sequelize.sync(); //! run once
 // sequelize.sync({force: true}) //! if later needed = DROP tables + re-CREATE tables
 // sequelize.sync({ alter: true }); //! if later needed = BACK-UP db + DROP tables + re-CREATE tables + RECOVER old db
 
