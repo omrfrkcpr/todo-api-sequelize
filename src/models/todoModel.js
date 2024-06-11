@@ -35,8 +35,15 @@ const TODO = sequelize.define(`todos`, {
   },
   isDone: {
     type: DataTypes.BOOLEAN,
-    // allowNull: false,
+    allowNull: false,
     defaultValue: false, // false: not done, true: done
+    validate: {
+      isBoolean(value) {
+        if (typeof value !== "boolean") {
+          throw new Error("isDone must be a boolean value");
+        }
+      },
+    },
   },
   //! createdAt & updatedAt auto generated
   // createdAt: {
