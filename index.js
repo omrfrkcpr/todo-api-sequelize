@@ -125,6 +125,7 @@ router.get("/todos", async (req, res) => {
     res.status(200).send({
       error: false,
       status: true,
+      count: todos.length,
       data: todos,
     });
   } catch (err) {
@@ -170,7 +171,50 @@ router.get("/todos/:id", async (req, res) => {
 });
 
 // UPDATE todo
+router.put("/todos/:id", validateTodoBody, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const todo = await TODO.findByPk(id);
+    if (!todo) {
+      res.status(404).send({
+        error: true,
+        errorCode: res.statusCode,
+        message: `Todo with id number ${id} was not found`,
+      });
+    }
+    const updatedTodo = await todo.update(req.body);
+    res.send({
+      error: false,
+      status: true,
+      data: updatedTodo,
+    });
+  } catch (err) {
+    throw new Error(err.message);
+  }
+});
+
 // DELETE todo
+router.delete("/todos/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const todo = await TODO.findByPk(id);
+    if (!todo) {
+      res.status(404).send({
+        error: true,
+        errorCode: res.statusCode,
+        message: `Todo with id number ${id} was not found`,
+      });
+    }
+    await todo.destroy();
+    res.send({
+      error: false,
+      status: true,
+      message: `Todo with id number ${id} is successfully deleted`,
+    });
+  } catch (err) {
+    throw new Error(err.message);
+  }
+});
 
 //* error control
 const errorHandler = (err, req, res, next) => {
